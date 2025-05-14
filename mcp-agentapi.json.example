@@ -1,0 +1,12 @@
+{
+  "agent_api_url": "http://localhost:3284",
+  "auto_start_agent": true,
+  "agent_type": "goose",
+  "server": {
+    "transport": "stdio",
+    "host": "0.0.0.0",
+    "port": 8080
+  },
+  "debug": false,
+  "config_version": "1.0"
+}
