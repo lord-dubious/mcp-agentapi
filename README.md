@@ -2,6 +2,8 @@
 
 A Model Context Protocol (MCP) server for interacting with AI agents through the [Agent API](https://github.com/coder/agentapi) by [Coder](https://github.com/coder).
 
+This project provides a complete MCP server implementation that serves as a bridge between MCP clients and the [original Agent API](https://github.com/coder/agentapi), allowing you to use AI agents like Goose, Aider, and Claude through any MCP-compatible client.
+
 ```
 ┌─────────────────┐     ┌──────────────┐     ┌─────────────┐
 │ MCP Client      │     │ MCP Server   │     │ Agent API   │
