@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+include mcp-agentapi.json.example
+recursive-include mcp-config-examples *.json
+recursive-include bin *
