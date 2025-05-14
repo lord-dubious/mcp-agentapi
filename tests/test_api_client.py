@@ -61,7 +61,7 @@ async def test_make_request_success():
     mock_client.get.assert_called_once_with(
         "http://localhost:3284/status",
         headers={
-            "User-Agent": "MCP-Server-AgentAPI/1.0",
+            "User-Agent": "mcp-agentapi/1.0",
             "Accept": "application/json"
         },
         params=None,

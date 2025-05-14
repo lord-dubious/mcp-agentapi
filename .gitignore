@@ -159,7 +159,7 @@ cython_debug/
 *.swo
 
 # Configuration files
-mcp-server-agentapi.json
+mcp-agentapi.json
 .aider.conf.yml
 
 # Local development files

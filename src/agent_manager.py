@@ -33,7 +33,7 @@ from .exceptions import (
 )
 
 # Configure logging
-logger = logging.getLogger("mcp-server-agentapi.agent-manager")
+logger = logging.getLogger("mcp-agentapi.agent-manager")
 
 
 class AgentInstallStatus(str, Enum):

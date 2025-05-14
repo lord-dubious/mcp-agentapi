@@ -26,7 +26,7 @@ from .resource_manager import ResourceManager
 from .health_check import HealthCheck
 
 # Configure logging
-logger = logging.getLogger("mcp-server-agentapi.context")
+logger = logging.getLogger("mcp-agentapi.context")
 
 
 @dataclass
@@ -220,7 +220,7 @@ async def agent_api_lifespan(server: FastMCP) -> AsyncIterator[AgentAPIContext]:
 
     # Configure logging level based on debug flag
     if config.debug:
-        logging.getLogger("mcp-server-agentapi").setLevel(logging.DEBUG)
+        logging.getLogger("mcp-agentapi").setLevel(logging.DEBUG)
         logger.debug("Debug logging enabled")
 
     # Initialize core components

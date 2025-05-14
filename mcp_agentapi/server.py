@@ -30,7 +30,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-logger = logging.getLogger("mcp-server-agentapi")
+logger = logging.getLogger("mcp-agentapi")
 
 # Create the MCP server with proper lifespan management
 mcp = FastMCP(
@@ -77,7 +77,7 @@ async def main() -> None:
     
     # Configure logging level based on debug flag
     if config.debug:
-        logging.getLogger("mcp-server-agentapi").setLevel(logging.DEBUG)
+        logging.getLogger("mcp-agentapi").setLevel(logging.DEBUG)
         logger.debug("Debug logging enabled")
     
     try:

@@ -82,7 +82,7 @@ If you prefer to run the MCP Inspector manually, you can follow these steps:
 1. Start the MCP server:
 
 ```bash
-cd /path/to/mcp-server-agentapi
+cd /path/to/mcp-agentapi
 python agentapi_mcp.py start-server
 ```
 
@@ -90,7 +90,7 @@ python agentapi_mcp.py start-server
 
 ```bash
 npx @modelcontextprotocol/inspector \
-  --directory /path/to/mcp-server-agentapi \
+  --directory /path/to/mcp-agentapi \
   run \
   agent-controller \
   --agent-type goose

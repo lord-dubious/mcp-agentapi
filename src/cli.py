@@ -22,7 +22,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-logger = logging.getLogger("mcp-server-agentapi.cli")
+logger = logging.getLogger("mcp-agentapi.cli")
 
 # ANSI color codes for terminal output
 RED = "\033[91m"
@@ -354,7 +354,7 @@ async def handle_start_server(args: argparse.Namespace, config: Config, agent_ma
 
     if args.debug:
         config.debug = True
-        logging.getLogger("mcp-server-agentapi").setLevel(logging.DEBUG)
+        logging.getLogger("mcp-agentapi").setLevel(logging.DEBUG)
         logger.debug("Debug logging enabled")
 
     # Save updated configuration

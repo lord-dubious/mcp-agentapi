@@ -23,8 +23,8 @@ The MCP server consists of several components:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/mcp-server-agentapi.git
-cd mcp-server-agentapi
+git clone https://github.com/yourusername/mcp-agentapi.git
+cd mcp-agentapi
 
 # Install dependencies
 pip install -r requirements.txt
@@ -86,7 +86,7 @@ print(f"Messages: {messages}")
 ### Project Structure
 
 ```
-mcp-server-agentapi/
+mcp-agentapi/
 ├── mcp_server.py          # Main entry point
 ├── server_new.py          # MCP server implementation
 ├── src/
@@ -152,8 +152,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/mcp-server-agentapi.git
-   cd mcp-server-agentapi
+   git clone https://github.com/yourusername/mcp-agentapi.git
+   cd mcp-agentapi
    ```
 
 2. Install development dependencies:

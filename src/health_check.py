@@ -20,7 +20,7 @@ from .config import Config
 from .constants import SNAPSHOT_INTERVAL
 
 # Configure logging
-logger = logging.getLogger("mcp-server-agentapi.health-check")
+logger = logging.getLogger("mcp-agentapi.health-check")
 
 
 class HealthCheck:

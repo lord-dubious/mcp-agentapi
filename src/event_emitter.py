@@ -19,7 +19,7 @@ from .exceptions import ResourceError
 from .constants import SNAPSHOT_INTERVAL, EVENT_BUFFER_SIZE
 
 # Configure logging
-logger = logging.getLogger("mcp-server-agentapi.event-emitter")
+logger = logging.getLogger("mcp-agentapi.event-emitter")
 
 
 class EventEmitter:

@@ -30,7 +30,7 @@ from .constants import (
 from .utils.error_handler import create_error_response, handle_exception, add_cors_headers
 
 # Configure logging
-logger = logging.getLogger("mcp-server-agentapi.api-client")
+logger = logging.getLogger("mcp-agentapi.api-client")
 
 
 class AgentAPIClient:

@@ -9,7 +9,7 @@ Please be respectful and considerate of others when contributing to this project
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/your-username/mcp-server-agentapi.git`
+2. Clone your fork: `git clone https://github.com/your-username/mcp-agentapi.git`
 3. Create a virtual environment: `python -m venv venv`
 4. Activate the virtual environment:
    - Windows: `venv\Scripts\activate`

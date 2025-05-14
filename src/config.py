@@ -21,13 +21,13 @@ from .models import AgentType
 from .exceptions import ConfigurationError, APIKeyError
 
 # Configure logging
-logger = logging.getLogger("mcp-server-agentapi.config")
+logger = logging.getLogger("mcp-agentapi.config")
 
 # Constants
 DEFAULT_AGENT_API_URL = "http://localhost:3284"
 DEFAULT_HOST = "0.0.0.0"
 DEFAULT_PORT = 8080
-CONFIG_FILE_NAME = "mcp-server-agentapi.json"
+CONFIG_FILE_NAME = "mcp-agentapi.json"
 
 
 class TransportType(str, Enum):

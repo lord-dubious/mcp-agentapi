@@ -11,7 +11,7 @@ import traceback
 from typing import Any, Dict, Optional, Union
 
 # Configure logging
-logger = logging.getLogger("mcp-server-agentapi.error-handler")
+logger = logging.getLogger("mcp-agentapi.error-handler")
 
 def create_error_response(
     error_message: str,

@@ -28,7 +28,7 @@ DEFAULT_RETRY_BACKOFF_FACTOR = 2.0
 DEFAULT_RETRY_JITTER = 0.1
 
 # User agent for HTTP requests
-USER_AGENT = "mcp-server-agentapi/1.0"
+USER_AGENT = "mcp-agentapi/1.0"
 
 # CORS headers to match the original Agent API
 CORS_HEADERS = {

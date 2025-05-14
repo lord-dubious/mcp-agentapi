@@ -43,7 +43,7 @@ python agent_controller_tools.py send_message --content "Hello, agent!" --type u
 
 The `bin` directory contains executable scripts for the main entry points:
 
-- **bin/mcp-server-agentapi**: Executable script for the MCP server
+- **bin/mcp-agentapi**: Executable script for the MCP server
 - **bin/agent-cli**: Executable script for the agent controller CLI
 - **bin/agentapi-mcp**: Executable script for the unified CLI
 
@@ -51,7 +51,7 @@ You can run these scripts directly from the bin directory:
 
 ```bash
 # Run the MCP server
-./bin/mcp-server-agentapi --transport stdio
+./bin/mcp-agentapi --transport stdio
 
 # Run the agent controller CLI
 ./bin/agent-cli list_available_agents

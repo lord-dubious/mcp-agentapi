@@ -16,7 +16,7 @@ from contextlib import asynccontextmanager
 from .exceptions import ResourceError
 
 # Configure logging
-logger = logging.getLogger("mcp-server-agentapi.resource-manager")
+logger = logging.getLogger("mcp-agentapi.resource-manager")
 
 
 class ResourceManager:

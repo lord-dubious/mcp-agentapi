@@ -19,7 +19,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-logger = logging.getLogger("mcp-server-agentapi.agent-controller")
+logger = logging.getLogger("mcp-agentapi.agent-controller")
 
 # Add the parent directory to the Python path to find the server module
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
