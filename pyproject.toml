@@ -42,9 +42,7 @@ dev = [
 ]
 
 [project.scripts]
-mcp-agentapi = "mcp_agentapi.main:main"
-agent-cli = "mcp_agentapi.agent_cli:main"
-agentapi-mcp = "mcp_agentapi.cli:main"
+mcp-agentapi = "mcp_agentapi.unified_cli:cli_main"
 
 [project.urls]
 "Homepage" = "https://github.com/lord-dubious/mcp-agentapi"

@@ -19,11 +19,19 @@ from typing import Dict, Any, Optional, List, Union
 from mcp.server.fastmcp import FastMCP, Context
 
 # Import our implementation
-from .src.config import load_config, save_config, TransportType, Config
-from .src.context import AgentAPIContext, agent_api_lifespan
-from .src.api_client import AgentAPIClient
-from .src.models import AgentType, MessageType
-from .src.utils.error_handler import create_error_response, handle_exception
+import sys
+import os
+
+# Add the parent directory to the Python path to find the src module
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+
+from src.config import load_config, save_config, TransportType, Config
+from src.context import AgentAPIContext, agent_api_lifespan
+from src.api_client import AgentAPIClient
+from src.models import AgentType, MessageType
+from src.utils.error_handler import create_error_response, handle_exception
 
 # Configure logging
 logging.basicConfig(
@@ -49,10 +57,10 @@ async def main() -> None:
     """
     # Parse command line arguments
     args = parse_args()
-    
+
     # Load configuration
     config = load_config()
-    
+
     # Update configuration from command line arguments
     if args.transport:
         config.server.transport = TransportType(args.transport)
@@ -71,15 +79,15 @@ async def main() -> None:
         config.auto_start_agent = args.auto_start
     if args.debug is not None:
         config.debug = args.debug
-    
+
     # Save configuration
     save_config(config)
-    
+
     # Configure logging level based on debug flag
     if config.debug:
         logging.getLogger("mcp-agentapi").setLevel(logging.DEBUG)
         logger.debug("Debug logging enabled")
-    
+
     try:
         # Set server host and port for SSE transport
         if config.server.transport == TransportType.SSE:

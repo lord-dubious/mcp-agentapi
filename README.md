@@ -157,7 +157,7 @@ If you prefer to run the server separately and connect to it via SSE:
 
 1. Start the server:
    ```bash
-   agentapi-mcp start-server --transport sse --port 8080 --agent goose --auto-start
+   mcp-agentapi server start --transport sse --port 8080 --agent goose --auto-start
    ```
 
 2. Add this to your MCP client configuration:
@@ -175,7 +175,7 @@ If you prefer to run the server separately and connect to it via SSE:
 ## 🔍 Troubleshooting
 
 ### "Command not found" error
-If you get a "command not found" error when running `agentapi-mcp` or `mcp-agentapi`, make sure the package is installed correctly:
+If you get a "command not found" error when running `mcp-agentapi`, make sure the package is installed correctly:
 
 ```bash
 # Check if the package is installed
@@ -184,6 +184,7 @@ pip list | grep mcp-agentapi
 # If not, install it
 pip install mcp-agentapi
 ```
+
 
 ### Agent installation issues
 If you're having trouble installing agents, you can install them manually:
@@ -227,18 +228,14 @@ mcp-agentapi/
 │   └── workflows/
 │       └── python-package.yml  # GitHub Actions workflow for CI/CD
 ├── bin/
-│   ├── agent-cli               # Executable script for agent CLI
-│   ├── agentapi-mcp            # Executable script for unified CLI
-│   └── mcp-agentapi            # Executable script for MCP server
+│   └── mcp-agentapi            # Executable script for unified CLI
 ├── mcp_agentapi/               # Main package directory
 │   ├── __init__.py             # Package initialization
-│   ├── agent_cli.py            # Agent CLI entry point
 │   ├── bin/                    # Bin directory for executable scripts
 │   │   └── __init__.py
-│   ├── cli.py                  # Unified CLI entry point
-│   ├── main.py                 # Main entry point
 │   ├── py.typed                # Marker file for type hints
 │   ├── server.py               # Server implementation
+│   ├── unified_cli.py          # Unified CLI entry point
 │   └── src/                    # Source code
 │       ├── __init__.py
 │       ├── agent_manager.py    # Agent detection and lifecycle management
@@ -250,6 +247,118 @@ mcp-agentapi/
 │           ├── __init__.py
 │           └── error_handler.py
 ```
+
+## 🔄 Command-Line Interface
+
+The MCP Agent API provides a unified command-line interface for managing the MCP server and agents. The CLI is organized into subcommands for better organization and ease of use.
+
+### Command Structure
+
+```
+mcp-agentapi <command-group> <command> [options]
+```
+
+### Server Commands
+
+- `mcp-agentapi server start`: Start the MCP server
+  ```bash
+  mcp-agentapi server start --transport stdio --agent goose --auto-start
+  ```
+
+- `mcp-agentapi server stop`: Stop the MCP server
+  ```bash
+  mcp-agentapi server stop
+  ```
+
+- `mcp-agentapi server status`: Check the status of the MCP server
+  ```bash
+  mcp-agentapi server status
+  ```
+
+### Agent Commands
+
+- `mcp-agentapi agent list`: List available agents
+  ```bash
+  mcp-agentapi agent list
+  ```
+
+- `mcp-agentapi agent status`: Show status of all agents
+  ```bash
+  mcp-agentapi agent status
+  ```
+
+- `mcp-agentapi agent start`: Start an agent
+  ```bash
+  mcp-agentapi agent start goose --auto-install
+  ```
+
+- `mcp-agentapi agent stop`: Stop an agent
+  ```bash
+  mcp-agentapi agent stop goose
+  ```
+
+- `mcp-agentapi agent switch`: Switch to a different agent
+  ```bash
+  mcp-agentapi agent switch claude --restart
+  ```
+
+- `mcp-agentapi agent install`: Install an agent
+  ```bash
+  mcp-agentapi agent install aider
+  ```
+
+- `mcp-agentapi agent restart`: Restart an agent
+  ```bash
+  mcp-agentapi agent restart goose
+  ```
+
+- `mcp-agentapi agent current`: Show the current agent type
+  ```bash
+  mcp-agentapi agent current
+  ```
+
+- `mcp-agentapi agent messages`: Get all messages in the conversation
+  ```bash
+  mcp-agentapi agent messages
+  ```
+
+- `mcp-agentapi agent send`: Send a message to the agent
+  ```bash
+  mcp-agentapi agent send --content "Hello, agent!" --type user
+  ```
+
+- `mcp-agentapi agent screen`: Get the current screen content
+  ```bash
+  mcp-agentapi agent screen
+  ```
+
+### Configuration Commands
+
+- `mcp-agentapi config show`: Show current configuration
+  ```bash
+  mcp-agentapi config show
+  ```
+
+- `mcp-agentapi config set`: Set configuration values
+  ```bash
+  mcp-agentapi config set transport=stdio agent_type=goose
+  ```
+
+- `mcp-agentapi config reset`: Reset configuration to defaults
+  ```bash
+  mcp-agentapi config reset
+  ```
+
+### Shortcuts
+
+For convenience, the CLI provides shortcuts for common commands:
+
+- `mcp-agentapi list` -> `mcp-agentapi agent list`
+- `mcp-agentapi status` -> `mcp-agentapi agent status`
+- `mcp-agentapi start <agent>` -> `mcp-agentapi agent start <agent>`
+- `mcp-agentapi stop <agent>` -> `mcp-agentapi agent stop <agent>`
+- `mcp-agentapi switch <agent>` -> `mcp-agentapi agent switch <agent>`
+- `mcp-agentapi install <agent>` -> `mcp-agentapi agent install <agent>`
 
 ## 🔄 Multi-Agent Flexibility
 
@@ -294,13 +403,14 @@ The MCP server supports the following agents:
 
 This project follows the MCP SDK best practices for Python projects:
 
-### Entry Points
+### Entry Point
 
-The project provides executable scripts in the `bin` directory:
+The project provides a unified command-line interface through a single entry point:
 
-- **bin/mcp-agentapi**: Main entry point for the MCP server
-- **bin/agent-cli**: Command-line interface for the agent controller
-- **bin/agentapi-mcp**: Unified CLI for agent management
+- **mcp-agentapi**: Unified CLI for all operations with subcommands:
+  - `mcp-agentapi server`: Commands for managing the MCP server
+  - `mcp-agentapi agent`: Commands for managing agents
+  - `mcp-agentapi config`: Commands for managing configuration
 
 ### Context Handling
 

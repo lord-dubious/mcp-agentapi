@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-MCP Agent API - Main Entry Point
+MCP Agent API - Unified Command Line Interface
 
 This script provides the main entry point for the MCP Agent API.
 It follows the MCP SDK best practices for executable scripts.
 """
 
 import sys
+import os
 import asyncio
 import logging
 
@@ -17,32 +18,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger("mcp-agentapi")
 
-# Import the server module
-import os
-import sys
-
-# Add the parent directory to the Python path to find the server module
+# Add the parent directory to the Python path to find the unified CLI module
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if parent_dir not in sys.path:
     sys.path.insert(0, parent_dir)
 
-from server import main as server_main
-
-
-def main():
-    """
-    Main entry point for the MCP server for Agent API.
-    This function is called when the package is run as a module.
-    """
-    try:
-        # Run the server
-        asyncio.run(server_main())
-    except KeyboardInterrupt:
-        logger.info("Interrupted by user")
-    except Exception as e:
-        logger.error(f"Error running MCP server: {e}")
-        sys.exit(1)
+# Import the unified CLI module
+from mcp_agentapi.unified_cli import cli_main
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(cli_main())
