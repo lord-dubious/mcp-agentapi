@@ -8,7 +8,6 @@ It follows the MCP SDK best practices for executable scripts.
 
 import sys
 import os
-import asyncio
 import logging
 
 # Configure logging
@@ -23,8 +22,8 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if parent_dir not in sys.path:
     sys.path.insert(0, parent_dir)
 
-# Import the unified CLI module
-from mcp_agentapi.unified_cli import cli_main
+# Import the CLI module
+from mcp_agentapi.cli import cli_main
 
 
 if __name__ == "__main__":

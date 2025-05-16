@@ -13,26 +13,17 @@ It consolidates functionality from the three existing entry points:
 import argparse
 import asyncio
 import logging
+import os
 import subprocess
 import sys
-from typing import Optional, List, Dict, Any, Union, Callable
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
-logger = logging.getLogger("mcp-agentapi.cli")
-
-# Import necessary modules
-import sys
-import os
+from typing import Optional, Any
 
 # Add the parent directory to the Python path to find the src module
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if parent_dir not in sys.path:
     sys.path.insert(0, parent_dir)
 
+# Import necessary modules
 from src.agent_manager import AgentInstallStatus, AgentManager
 from src.config import Config, load_config, save_config, TransportType
 from src.models import convert_to_agent_type
@@ -40,6 +31,13 @@ from src.context import start_agent_api
 
 # Import the server module
 from .server import main as server_main
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger("mcp-agentapi.cli")
 
 # These functions would normally be imported from server.py
 # For now, we'll define them here as placeholders
@@ -82,7 +80,7 @@ async def get_status(ctx):
     await agent_manager.detect_agents()
     return {agent_type.value: {"install_status": agent_info.install_status.value, "running_status": agent_info.running_status.value} for agent_type, agent_info in agent_manager.agents.items()}
 
-async def check_health(ctx):
+async def check_health(_ctx):
     """Check the health of the server."""
     return {"status": "ok", "version": "1.0.0", "uptime": "unknown"}
 
@@ -301,12 +299,12 @@ async def handle_server_start(args: argparse.Namespace) -> None:
                 print_warning(f"Failed to remove PID file: {e}")
 
 
-async def handle_server_stop(args: argparse.Namespace) -> None:
+async def handle_server_stop(_args: argparse.Namespace) -> None:
     """
     Handle the 'server stop' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     import os
     import signal
@@ -356,12 +354,12 @@ async def handle_server_stop(args: argparse.Namespace) -> None:
         print_warning("No running MCP server process found")
 
 
-async def handle_server_status(args: argparse.Namespace) -> None:
+async def handle_server_status(_args: argparse.Namespace) -> None:
     """
     Handle the 'server status' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     # Create a mock context
     ctx = MockContext()
@@ -382,12 +380,12 @@ async def handle_server_status(args: argparse.Namespace) -> None:
 
 
 # Agent command handlers
-async def handle_agent_list(args: argparse.Namespace) -> None:
+async def handle_agent_list(_args: argparse.Namespace) -> None:
     """
     Handle the 'agent list' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     # Load configuration
     config = load_config()
@@ -582,12 +580,12 @@ async def handle_agent_switch(args: argparse.Namespace) -> None:
         print_info("Configuration updated.")
 
 
-async def handle_agent_status(args: argparse.Namespace) -> None:
+async def handle_agent_status(_args: argparse.Namespace) -> None:
     """
     Handle the 'agent status' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     # Load configuration
     config = load_config()
@@ -665,12 +663,12 @@ async def handle_agent_install(args: argparse.Namespace) -> None:
         print_error(f"Failed to install agent {agent_type_str}.")
 
 
-async def handle_agent_messages(args: argparse.Namespace) -> None:
+async def handle_agent_messages(_args: argparse.Namespace) -> None:
     """
     Handle the 'agent messages' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     # Create a mock context
     ctx = MockContext()
@@ -703,18 +701,18 @@ async def handle_agent_send(args: argparse.Namespace) -> None:
 
     # Send message
     try:
-        result = await send_message(ctx, args.content, args.type)
+        await send_message(ctx, args.content, args.type)
         print_success("Message sent successfully")
     except Exception as e:
         print_error(f"Error sending message: {e}")
 
 
-async def handle_agent_screen(args: argparse.Namespace) -> None:
+async def handle_agent_screen(_args: argparse.Namespace) -> None:
     """
     Handle the 'agent screen' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     # Create a mock context
     ctx = MockContext()
@@ -728,12 +726,12 @@ async def handle_agent_screen(args: argparse.Namespace) -> None:
         print_error(f"Error getting screen content: {e}")
 
 
-async def handle_agent_current(args: argparse.Namespace) -> None:
+async def handle_agent_current(_args: argparse.Namespace) -> None:
     """
     Handle the 'agent current' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     # Create a mock context
     ctx = MockContext()
@@ -757,9 +755,6 @@ async def handle_agent_restart(args: argparse.Namespace) -> None:
     # Load configuration
     config = load_config()
 
-    # Create agent manager
-    agent_manager = AgentManager(config)
-
     # Get the agent type
     agent_type_str = args.agent_name
     if not agent_type_str:
@@ -771,7 +766,8 @@ async def handle_agent_restart(args: argparse.Namespace) -> None:
 
     # Convert to enum
     try:
-        agent_type = convert_to_agent_type(agent_type_str)
+        # We don't need the agent_type variable, just validate it's a valid type
+        convert_to_agent_type(agent_type_str)
     except ValueError as e:
         print_error(str(e))
         return
@@ -783,19 +779,19 @@ async def handle_agent_restart(args: argparse.Namespace) -> None:
     ctx = MockContext()
 
     try:
-        result = await restart_agent(ctx, agent_type_str)
+        await restart_agent(ctx, agent_type_str)
         print_success(f"Agent {agent_type_str} restarted successfully.")
     except Exception as e:
         print_error(f"Error restarting agent: {e}")
 
 
 # Config command handlers
-async def handle_config_show(args: argparse.Namespace) -> None:
+async def handle_config_show(_args: argparse.Namespace) -> None:
     """
     Handle the 'config show' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     # Load configuration
     config = load_config()
@@ -892,12 +888,12 @@ async def handle_config_set(args: argparse.Namespace) -> None:
         print_warning("No configuration changes were made.")
 
 
-async def handle_config_reset(args: argparse.Namespace) -> None:
+async def handle_config_reset(_args: argparse.Namespace) -> None:
     """
     Handle the 'config reset' command.
 
     Args:
-        args: Command-line arguments
+        _args: Command-line arguments (unused)
     """
     # Create a new default configuration
     # Config and save_config are already imported at the top
