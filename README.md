@@ -1,8 +1,6 @@
 # MCP Agent API
 
-A Model Context Protocol (MCP) server for interacting with AI agents through the [Agent API](https://github.com/coder/agentapi) by [Coder](https://github.com/coder).
-
-This project provides a complete MCP server implementation that serves as a bridge between MCP clients and the [original Agent API](https://github.com/coder/agentapi), allowing you to use AI agents like Goose, Aider, and Claude through any MCP-compatible client.
+A Model Context Protocol (MCP) server that bridges MCP clients with AI agents through the [Agent API](https://github.com/coder/agentapi) by [Coder](https://github.com/coder).
 
 ```
 ┌─────────────────┐     ┌──────────────┐     ┌─────────────┐
@@ -12,130 +10,44 @@ This project provides a complete MCP server implementation that serves as a brid
 └─────────────────┘     └──────────────┘     └─────────────┘
 ```
 
-This package provides a standardized interface for controlling and interacting with multiple AI agents (Goose, Aider, Claude, Codex) through a single MCP server implementation. It follows the [Model Context Protocol](https://github.com/modelcontextprotocol/protocol) specification and uses the Python MCP SDK to provide a consistent interface for MCP clients.
+This package enables you to use AI agents like Goose, Aider, and Claude through any MCP-compatible client. It implements the [Model Context Protocol](https://github.com/modelcontextprotocol/protocol) specification to provide a standardized interface for controlling multiple AI agents.
 
-## 🚀 Features
+## 🚀 Key Features
 
-- **Multi-Agent Support**: Control multiple AI agents through a single interface
-- **Agent Detection**: Automatically detect installed agents
-- **Agent Installation**: Install agents with a single command
-- **Agent Lifecycle Management**: Start, stop, and restart agents
-- **Message Handling**: Send and receive messages from agents
-- **Screen Content**: Get the current screen content from agents
-- **Health Monitoring**: Monitor the health of agents and the Agent API
-- **Configuration Management**: Configure agents and the MCP server
-- **Command-Line Interface**: Interact with agents through a CLI
-- **MCP Server**: Expose agent functionality through the Model Context Protocol
+- **Multi-Agent Support**: Control Goose, Aider, Claude, and other agents through a unified interface
+- **Agent Lifecycle Management**: Detect, install, start, stop, and restart agents
+- **Message Handling**: Seamlessly send and receive messages between clients and agents
+- **Health Monitoring**: Monitor agent and API health status
+- **Flexible Transport**: Support for both stdio and SSE transport protocols
+- **Command-Line Interface**: Comprehensive CLI for all operations
 
-## 🚀 Installation
-
-### Using uv (Recommended)
+## 📦 Installation
 
 ```bash
-# Install uv if you don't have it
+# Using uv (Recommended)
 pip install uv
-
-# Install the package
 uv pip install mcp-agentapi
 
-# Or install in development mode
-uv pip install -e ".[dev]"
-```
-
-### Using pip
-
-```bash
-# Install the package globally
+# Using pip
 pip install mcp-agentapi
 
-# Or install in user mode
-pip install --user mcp-agentapi
+# From source
+git clone https://github.com/lord-dubious/mcp-agentapi.git
+cd mcp-agentapi
+./build.sh
+uv pip install dist/*.whl
 ```
 
-### Install from Source
-
+For development installation:
 ```bash
-# Clone the repo
-git clone https://github.com/lord-dubious/mcp-agentapi.git
-
-# Change to the directory
-cd mcp-agentapi
-
-# Build the package with uv
-./build.sh
-
-# Install the built package
-uv pip install dist/*.whl
-
-# Or install in development mode
 uv pip install -e ".[dev]"
 ```
 
-## 🔌 Adding to Your MCP Client
+## 🔌 Client Configuration
 
-### Using the Standard MCP Configuration
+### Quick Setup
 
-Add this to your MCP client configuration (e.g., in Claude Desktop, Windsurf, or Augment):
-
-#### For Specific Agent Configuration
-
-You can configure the MCP server to start with a specific agent:
-
-#### For Goose:
-
-```json
-{
-  "mcpServers": {
-    "goose-agent": {
-      "command": "python",
-      "args": ["-m", "mcp_agentapi", "--agent", "goose", "--auto-start"],
-      "env": {
-        "GOOGLE_API_KEY": "YOUR-GOOGLE-API-KEY",
-        "TRANSPORT": "stdio"
-      }
-    }
-  }
-}
-```
-
-#### For Aider:
-
-```json
-{
-  "mcpServers": {
-    "aider-agent": {
-      "command": "python",
-      "args": ["-m", "mcp_agentapi", "--agent", "aider", "--auto-start"],
-      "env": {
-        "OPENAI_API_KEY": "YOUR-OPENAI-API-KEY",
-        "AIDER_MODEL": "deepseek",
-        "TRANSPORT": "stdio"
-      }
-    }
-  }
-}
-```
-
-#### For Claude:
-
-```json
-{
-  "mcpServers": {
-    "claude-agent": {
-      "command": "python",
-      "args": ["-m", "mcp_agentapi", "--agent", "claude", "--auto-start"],
-      "env": {
-        "ANTHROPIC_API_KEY": "YOUR-ANTHROPIC-API-KEY",
-        "TRANSPORT": "stdio"
-      }
-    }
-  }
-}
-```
-
-#### For Dynamic Agent Control
-
-If you want to control agents dynamically through MCP tools rather than specifying a particular agent in the configuration:
+Add to your MCP client configuration (Claude Desktop, Windsurf, Augment, etc.):
 
 ```json
 {
@@ -151,16 +63,62 @@ If you want to control agents dynamically through MCP tools rather than specifyi
 }
 ```
 
-### Using SSE Transport
+### Agent-Specific Configuration
 
-If you prefer to run the server separately and connect to it via SSE:
+For Goose:
+```json
+{
+  "mcpServers": {
+    "goose-agent": {
+      "command": "python",
+      "args": ["-m", "mcp_agentapi", "--agent", "goose", "--auto-start"],
+      "env": {
+        "GOOGLE_API_KEY": "YOUR-GOOGLE-API-KEY"
+      }
+    }
+  }
+}
+```
+
+For Aider:
+```json
+{
+  "mcpServers": {
+    "aider-agent": {
+      "command": "python",
+      "args": ["-m", "mcp_agentapi", "--agent", "aider", "--auto-start"],
+      "env": {
+        "OPENAI_API_KEY": "YOUR-OPENAI-API-KEY",
+        "AIDER_MODEL": "deepseek"
+      }
+    }
+  }
+}
+```
+
+For Claude:
+```json
+{
+  "mcpServers": {
+    "claude-agent": {
+      "command": "python",
+      "args": ["-m", "mcp_agentapi", "--agent", "claude", "--auto-start"],
+      "env": {
+        "ANTHROPIC_API_KEY": "YOUR-ANTHROPIC-API-KEY"
+      }
+    }
+  }
+}
+```
+
+### SSE Transport
 
 1. Start the server:
    ```bash
    mcp-agentapi server start --transport sse --port 8080 --agent goose --auto-start
    ```
 
-2. Add this to your MCP client configuration:
+2. Configure your client:
    ```json
    {
      "mcpServers": {
@@ -174,210 +132,109 @@ If you prefer to run the server separately and connect to it via SSE:
 
 ## 🔍 Troubleshooting
 
-### "Command not found" error
-If you get a "command not found" error when running `mcp-agentapi`, make sure the package is installed correctly:
-
+### Command Not Found
 ```bash
-# Check if the package is installed
+# Verify installation
 pip list | grep mcp-agentapi
 
-# If not, install it
+# Reinstall if needed
 pip install mcp-agentapi
 ```
 
+### Manual Agent Installation
 
-### Agent installation issues
-If you're having trouble installing agents, you can install them manually:
-
-#### Goose
 ```bash
+# Goose
 curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | bash
-```
 
-#### Aider
-```bash
+# Aider
 pip install aider-chat
-```
 
-#### Claude
-```bash
+# Claude
 npm install -g @anthropic-ai/claude-code
 ```
 
-#### Codex
-```bash
-npm install -g @openai/codex
-```
+### API Keys
+- Goose: `GOOGLE_API_KEY`
+- Aider: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `DEEPSEEK_API_KEY` (depending on model)
+- Claude: `ANTHROPIC_API_KEY`
 
-### API key issues
-- For Goose, you need a Google API key (`GOOGLE_API_KEY`)
-- For Aider, you need an API key for the model provider you're using:
-  - OpenAI models: `OPENAI_API_KEY`
-  - Claude models: `ANTHROPIC_API_KEY`
-  - DeepSeek models: `DEEPSEEK_API_KEY`
-- For Claude, you need an Anthropic API key (`ANTHROPIC_API_KEY`)
-- For Codex, you need an API key for the provider you're using (default: `OPENAI_API_KEY`)
-
-## 📁 Package Structure
-
-The MCP server follows MCP SDK best practices for project structure:
+## 📁 Project Structure
 
 ```
 mcp-agentapi/
-├── .github/
-│   └── workflows/
-│       └── python-package.yml  # GitHub Actions workflow for CI/CD
 ├── bin/
-│   └── mcp-agentapi            # Executable script for unified CLI
-├── mcp_agentapi/               # Main package directory
-│   ├── __init__.py             # Package initialization
-│   ├── bin/                    # Bin directory for executable scripts
-│   │   └── __init__.py
-│   ├── py.typed                # Marker file for type hints
+│   └── mcp-agentapi            # CLI executable
+├── mcp_agentapi/               # Main package
 │   ├── server.py               # Server implementation
-│   ├── unified_cli.py          # Unified CLI entry point
-│   └── src/                    # Source code
-│       ├── __init__.py
-│       ├── agent_manager.py    # Agent detection and lifecycle management
+│   └── src/                    # Core modules
+│       ├── agent_manager.py    # Agent lifecycle management
 │       ├── api_client.py       # Agent API client
 │       ├── config.py           # Configuration management
-│       ├── context.py          # Context management
-│       ├── models.py           # Data models
 │       └── utils/              # Utility functions
-│           ├── __init__.py
-│           └── error_handler.py
 ```
 
+See [FILE_STRUCTURE.md](FILE_STRUCTURE.md) for more details.
+
 ## 🔄 Command-Line Interface
-
-The MCP Agent API provides a unified command-line interface for managing the MCP server and agents. The CLI is organized into subcommands for better organization and ease of use.
-
-### Command Structure
 
 ```
 mcp-agentapi <command-group> <command> [options]
 ```
 
 ### Server Commands
+```bash
+# Start the server
+mcp-agentapi server start --transport stdio --agent goose --auto-start
 
-- `mcp-agentapi server start`: Start the MCP server
-  ```bash
-  mcp-agentapi server start --transport stdio --agent goose --auto-start
-  ```
-
-- `mcp-agentapi server stop`: Stop the MCP server
-  ```bash
-  mcp-agentapi server stop
-  ```
-
-- `mcp-agentapi server status`: Check the status of the MCP server
-  ```bash
-  mcp-agentapi server status
-  ```
+# Check server status
+mcp-agentapi server status
+```
 
 ### Agent Commands
+```bash
+# List available agents
+mcp-agentapi agent list
 
-- `mcp-agentapi agent list`: List available agents
-  ```bash
-  mcp-agentapi agent list
-  ```
+# Start an agent
+mcp-agentapi agent start goose --auto-install
 
-- `mcp-agentapi agent status`: Show status of all agents
-  ```bash
-  mcp-agentapi agent status
-  ```
+# Switch agents
+mcp-agentapi agent switch claude --restart
 
-- `mcp-agentapi agent start`: Start an agent
-  ```bash
-  mcp-agentapi agent start goose --auto-install
-  ```
-
-- `mcp-agentapi agent stop`: Stop an agent
-  ```bash
-  mcp-agentapi agent stop goose
-  ```
-
-- `mcp-agentapi agent switch`: Switch to a different agent
-  ```bash
-  mcp-agentapi agent switch claude --restart
-  ```
-
-- `mcp-agentapi agent install`: Install an agent
-  ```bash
-  mcp-agentapi agent install aider
-  ```
-
-- `mcp-agentapi agent restart`: Restart an agent
-  ```bash
-  mcp-agentapi agent restart goose
-  ```
-
-- `mcp-agentapi agent current`: Show the current agent type
-  ```bash
-  mcp-agentapi agent current
-  ```
-
-- `mcp-agentapi agent messages`: Get all messages in the conversation
-  ```bash
-  mcp-agentapi agent messages
-  ```
-
-- `mcp-agentapi agent send`: Send a message to the agent
-  ```bash
-  mcp-agentapi agent send --content "Hello, agent!" --type user
-  ```
-
-- `mcp-agentapi agent screen`: Get the current screen content
-  ```bash
-  mcp-agentapi agent screen
-  ```
+# Send a message
+mcp-agentapi agent send --content "Hello, agent!" --type user
+```
 
 ### Configuration Commands
+```bash
+# Show configuration
+mcp-agentapi config show
 
-- `mcp-agentapi config show`: Show current configuration
-  ```bash
-  mcp-agentapi config show
-  ```
-
-- `mcp-agentapi config set`: Set configuration values
-  ```bash
-  mcp-agentapi config set transport=stdio agent_type=goose
-  ```
-
-- `mcp-agentapi config reset`: Reset configuration to defaults
-  ```bash
-  mcp-agentapi config reset
-  ```
+# Set configuration
+mcp-agentapi config set transport=stdio agent_type=goose
+```
 
 ### Shortcuts
+The CLI provides shortcuts for common commands:
+```bash
+mcp-agentapi list    # Same as agent list
+mcp-agentapi start goose    # Same as agent start goose
+```
 
-For convenience, the CLI provides shortcuts for common commands:
+## 🤖 Multi-Agent Support
 
-- `mcp-agentapi list` -> `mcp-agentapi agent list`
-- `mcp-agentapi status` -> `mcp-agentapi agent status`
-- `mcp-agentapi start <agent>` -> `mcp-agentapi agent start <agent>`
-- `mcp-agentapi stop <agent>` -> `mcp-agentapi agent stop <agent>`
-- `mcp-agentapi switch <agent>` -> `mcp-agentapi agent switch <agent>`
-- `mcp-agentapi install <agent>` -> `mcp-agentapi agent install <agent>`
+### Supported Agents
 
-## 🔄 Multi-Agent Flexibility
+- **Goose**: Google's AI agent
+- **Aider**: AI pair programming assistant
+- **Claude**: Anthropic's AI assistant
+- **Codex**: OpenAI's code-focused model
+- **Custom**: Support for custom agents
 
-One of the key features of this MCP server implementation is the ability to control multiple agents through a single server instance. This provides a unified interface for managing and interacting with different AI agents without needing to restart the server or run multiple instances.
+### MCP Tools for Agent Control
 
-### Multi-Agent Control
-
-The MCP server includes tools for managing multiple agents:
-
-- **`list_available_agents`**: Lists all available agents on the system
-- **`get_agent_type`**: Gets the current active agent
-- **`switch_agent`**: Switches to a different agent
-- **`start_agent`**: Starts a specific agent
-- **`stop_agent`**: Stops a specific agent
-- **`restart_agent`**: Restarts a specific agent
-
-### Using MCP Tools for Multi-Agent Control
-
-When using the MCP server through an MCP client (like Claude Desktop, Windsurf, etc.), you can use the following tools to control multiple agents:
+When using an MCP client (Claude Desktop, Windsurf, etc.), you can use these tools:
 
 ```
 Tool: list_available_agents
@@ -389,49 +246,25 @@ Tool: switch_agent
 Arguments: {"agent_type": "goose"}
 ```
 
-### Supported Agents
-
-The MCP server supports the following agents:
-
-- **Goose**: Google's AI agent
-- **Aider**: AI pair programming assistant
-- **Claude**: Anthropic's AI assistant
-- **Codex**: OpenAI's code-focused model
-- **Custom**: Support for custom agents
-
-## 🛠️ MCP SDK Best Practices
-
-This project follows the MCP SDK best practices for Python projects:
-
-### Entry Point
-
-The project provides a unified command-line interface through a single entry point:
-
-- **mcp-agentapi**: Unified CLI for all operations with subcommands:
-  - `mcp-agentapi server`: Commands for managing the MCP server
-  - `mcp-agentapi agent`: Commands for managing agents
-  - `mcp-agentapi config`: Commands for managing configuration
-
-### Context Handling
-
-The project uses proper context handling with the MCP SDK:
-
-- **AgentAPIContext**: Type-safe context class for the MCP server
-- **MockContext**: Mock context for CLI usage that implements the MCP SDK Context interface
-- **agent_api_lifespan**: Lifespan context manager for resource management
+```
+Tool: start_agent
+Arguments: {"agent_type": "aider", "auto_install": true}
+```
 
 ## 📚 Documentation
 
 For more detailed documentation, see the `docs/` directory:
 
-- [MCP Server Architecture](docs/mcp_server_architecture.md): Overview of the MCP server architecture
-- [Technical Design](docs/technical_design.md): Detailed technical design of the MCP server
-- [Integration Guide](docs/integration_guide.md): Instructions for integrating with MCP clients and AI agents
+- [MCP Server Architecture](docs/mcp_server_architecture.md)
+- [Technical Design](docs/technical_design.md)
+- [Integration Guide](docs/integration_guide.md)
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+

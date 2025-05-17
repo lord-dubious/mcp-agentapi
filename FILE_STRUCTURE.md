@@ -1,85 +1,69 @@
-# MCP Server for Agent API - File Structure
+# MCP Agent API - File Structure
 
-This document explains the file structure and entry points for the MCP Server for Agent API.
+This document explains the file structure and entry points for the MCP Agent API.
 
 ## Main Entry Points
 
 ### MCP Server
 
-The main entry point for the MCP server is `mcp_server.py`. This script imports and runs the `main()` function from `server.py`.
+The main entry point for the MCP server is the `mcp-agentapi` command-line tool.
 
 ```bash
-# Run the MCP server
-python mcp_server.py
+# Start the MCP server
+mcp-agentapi server start --transport stdio
 
-# Run with specific options
-python mcp_server.py --transport sse --host 0.0.0.0 --port 8080
+# Start with specific options
+mcp-agentapi server start --transport sse --host 0.0.0.0 --port 8080 --agent goose
 ```
 
-### Agent Controller Tools
+### Agent Commands
 
-The `agent_controller_tools.py` script provides a command-line interface for the agent controller tools. It can be used to interact with the Agent API without running the full MCP server.
+The CLI provides commands for managing agents:
 
 ```bash
 # List available agents
-python agent_controller_tools.py list_available_agents
+mcp-agentapi agent list
 
 # Start an agent
-python agent_controller_tools.py start_agent --agent_type goose
+mcp-agentapi agent start goose
 
 # Send a message
-python agent_controller_tools.py send_message --content "Hello, agent!" --type user
+mcp-agentapi agent send --content "Hello, agent!" --type user
 ```
 
-## File Structure
+## Project Structure
 
-### Core Files
+```
+mcp-agentapi/
+├── bin/
+│   └── mcp-agentapi            # CLI executable
+├── mcp_agentapi/               # Main package
+│   ├── __init__.py             # Package initialization
+│   ├── server.py               # Server implementation
+│   ├── cli.py                  # CLI implementation
+│   └── src/                    # Source code
+│       ├── agent_manager.py    # Agent lifecycle management
+│       ├── api_client.py       # Agent API client
+│       ├── config.py           # Configuration management
+│       ├── context.py          # Context management
+│       ├── models.py           # Data models
+│       └── utils/              # Utility functions
+│           └── error_handler.py # Error handling
+├── docs/                       # Documentation
+│   ├── README.md               # Documentation index
+│   ├── mcp_server_architecture.md # Architecture overview
+│   └── technical_design.md     # Technical design details
+└── tests/                      # Test suite
+```
 
-- **mcp_server.py**: Main entry point for the MCP server
+### Core Components
+
 - **server.py**: MCP server implementation with tools, resources, and prompts
-- **agent_controller_tools.py**: Command-line interface for agent controller tools
-
-### Bin Directory
-
-The `bin` directory contains executable scripts for the main entry points:
-
-- **bin/mcp-agentapi**: Executable script for the MCP server
-- **bin/agent-cli**: Executable script for the agent controller CLI
-- **bin/agentapi-mcp**: Executable script for the unified CLI
-
-You can run these scripts directly from the bin directory:
-
-```bash
-# Run the MCP server
-./bin/mcp-agentapi --transport stdio
-
-# Run the agent controller CLI
-./bin/agent-cli list_available_agents
-
-# Run the unified CLI
-./bin/agentapi-mcp list
-```
-
-### Source Files
-
-- **src/agent_manager.py**: Agent detection, installation, and lifecycle management
-- **src/api_client.py**: Agent API client
-- **src/config.py**: Configuration management
-- **src/agent_controller.py**: Agent controller tools with fallback behavior
-- **src/context.py**: Application context and lifespan management
-- **src/health_check.py**: Health monitoring
-- **src/models.py**: Data models
-- **src/resource_manager.py**: Resource management
-
-## Removed Files
-
-The following files have been removed to clean up the codebase:
-
-- **server_new.py**: Renamed to server.py
-- **src/wrappers/**: Redundant wrapper directory
-- **src/main.py**: Redundant implementation, now using server.py directly
-
-If you see imports from these files in other parts of the codebase, they should be updated to use the new files instead.
+- **cli.py**: Command-line interface implementation
+- **agent_manager.py**: Agent detection, installation, and lifecycle management
+- **api_client.py**: Agent API client for communicating with agents
+- **config.py**: Configuration management
+- **context.py**: Application context and lifespan management
 
 ## Usage Examples
 
@@ -87,57 +71,51 @@ If you see imports from these files in other parts of the codebase, they should 
 
 ```bash
 # Run with default settings
-python mcp_server.py
+mcp-agentapi server start
 
 # Run with SSE transport
-python mcp_server.py --transport sse --host 0.0.0.0 --port 8080
+mcp-agentapi server start --transport sse --host 0.0.0.0 --port 8080
 
 # Run with specific agent type
-python mcp_server.py --agent goose
+mcp-agentapi server start --agent goose --auto-start
 ```
 
-### Using Agent Controller Tools
+### Using Agent Commands
 
 ```bash
 # List available agents
-python agent_controller_tools.py list_available_agents
+mcp-agentapi agent list
 
 # Install an agent
-python agent_controller_tools.py install_agent --agent_type goose
+mcp-agentapi agent install goose
 
 # Start an agent
-python agent_controller_tools.py start_agent --agent_type goose
+mcp-agentapi agent start goose
 
 # Send a message
-python agent_controller_tools.py send_message --content "Hello, agent!" --type user
+mcp-agentapi agent send --content "Hello, agent!" --type user
 
 # Get messages
-python agent_controller_tools.py get_messages
+mcp-agentapi agent messages
 
 # Get screen content
-python agent_controller_tools.py get_screen
+mcp-agentapi agent screen
 ```
 
 ## Development
 
-When developing the MCP server, you should focus on the following files:
+When developing the MCP server, focus on these key files:
 
-- **server.py**: For adding or modifying MCP tools, resources, and prompts
-- **src/agent_controller.py**: For implementing agent controller tools
-- **src/agent_manager.py**: For agent detection, installation, and lifecycle management
-- **src/api_client.py**: For interacting with the Agent API
+- **server.py**: MCP tools, resources, and prompts
+- **agent_manager.py**: Agent detection, installation, and lifecycle management
+- **api_client.py**: Agent API communication
 
 ## Testing
 
-The test suite is located in the `tests/` directory. You can run the tests using the `run_tests.py` script:
-
 ```bash
 # Run all tests
-./run_tests.py
+pytest
 
-# Run tests in verbose mode
-./run_tests.py -v
-
-# Run tests with coverage report
-./run_tests.py -c
+# Run tests with coverage
+pytest --cov=mcp_agentapi
 ```

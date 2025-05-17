@@ -1,66 +1,65 @@
 # MCP Agent API Documentation
 
-Welcome to the MCP Agent API documentation. This documentation provides comprehensive information about the MCP Agent API server, which provides a Model Context Protocol (MCP) interface for interacting with AI agents through the Agent API.
+Welcome to the MCP Agent API documentation. This project provides a Model Context Protocol (MCP) server that bridges MCP clients with AI agents through the Agent API.
 
 ## Documentation Index
 
-### 1. Architecture and Design
+### Architecture & Design
+- [MCP Server Architecture](mcp_server_architecture.md)
+- [Technical Design](technical_design.md)
 
-- [MCP Server Architecture](mcp_server_architecture.md): Overview of the MCP server architecture
-- [Technical Design](technical_design.md): Detailed technical design of the MCP server
+### Integration & Usage
+- [Integration Guide](integration_guide.md)
+- [MCP Inspector Usage](MCP_INSPECTOR_USAGE.md)
 
-### 2. Integration and Usage
-
-- [Integration Guide](integration_guide.md): Instructions for integrating with MCP clients and AI agents
-
-### 3. Development
-
-- [Contributing Guide](../CONTRIBUTING.md): Guidelines for contributing to the project
-- [File Structure](../FILE_STRUCTURE.md): Explanation of the file structure
+### Development
+- [Contributing Guide](../CONTRIBUTING.md)
+- [File Structure](../FILE_STRUCTURE.md)
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-# Install using uv (recommended)
+# Using uv (recommended)
+pip install uv
 uv pip install mcp-agentapi
 
-# Or install using pip
+# Using pip
 pip install mcp-agentapi
 ```
 
-### Running the MCP Server
+### Running the Server
 
 ```bash
-# Run the MCP server with stdio transport
-mcp-agentapi
+# With stdio transport (default)
+mcp-agentapi server start --agent goose --auto-start
 
-# Run the MCP server with SSE transport
-mcp-agentapi --transport sse --host 127.0.0.1 --port 8080
+# With SSE transport
+mcp-agentapi server start --transport sse --port 8080
 ```
 
 ### Using the CLI
 
 ```bash
 # List available agents
-agent-cli list_available_agents
+mcp-agentapi agent list
 
-# Switch to a different agent
-agent-cli switch_agent goose
+# Start an agent
+mcp-agentapi agent start goose
 
-# Check the health of the agent
-agent-cli check_health
+# Send a message
+mcp-agentapi agent send --content "Hello, agent!" --type user
 ```
 
 ## Key Features
 
-- **Multi-Agent Support**: Control multiple AI agents through a single interface
-- **Agent Detection**: Automatically detect installed agents
-- **Agent Lifecycle Management**: Start, stop, and restart agents
-- **Message Handling**: Send and receive messages from agents
-- **Screen Content**: Get the current screen content from agents
-- **Health Monitoring**: Monitor the health of agents and the Agent API
+- **Multi-Agent Support**: Control Goose, Aider, Claude, and other agents through a unified interface
+- **Agent Lifecycle Management**: Detect, install, start, stop, and restart agents
+- **Message Handling**: Seamlessly send and receive messages between clients and agents
+- **Health Monitoring**: Monitor agent and API health status
+- **Flexible Transport**: Support for both stdio and SSE transport protocols
+- **Command-Line Interface**: Comprehensive CLI for all operations
 
 ## Architecture Overview
 
@@ -72,7 +71,14 @@ agent-cli check_health
 └─────────────────┘     └──────────────┘     └─────────────┘
 ```
 
-The MCP Agent API server acts as a bridge between MCP clients and AI agents through the Agent API. It follows the Model Context Protocol specification and uses the Python MCP SDK to provide a standardized interface for interacting with AI agents.
+The MCP Agent API server bridges MCP clients with AI agents through the Agent API, following the Model Context Protocol specification to provide a standardized interface.
+
+## Supported Agents
+
+- **Goose**: Google's AI agent
+- **Aider**: AI pair programming assistant
+- **Claude**: Anthropic's AI assistant
+- **Codex**: OpenAI's code-focused model
 
 ## License
 
